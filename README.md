@@ -33,3 +33,5 @@ User Temp deliberately uses the conventional per-user location rather than trust
 
 ## License
 MIT. Copyright (c) 2026 Knights Cleaner contributors.
+
+Safety boundary: this utility is for normal desktop cleanup, not a security boundary against a malicious process concurrently replacing paths. Do not run it elevated or on directories being manipulated by untrusted software.

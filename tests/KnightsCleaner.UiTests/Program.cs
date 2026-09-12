@@ -14,7 +14,7 @@ internal static class Program
         window.Show();
         window.UpdateLayout();
         if (window.Title != "Knights Cleaner") throw new Exception("Window title mismatch.");
-        var services = (WrapPanel)window.FindName("Services");
+        var services = (System.Windows.Controls.Primitives.UniformGrid)window.FindName("Services");
         if (services.Children.Count != 5) throw new Exception("Expected five script operations.");
         foreach (CheckBox card in services.Children)
         {

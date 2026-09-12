@@ -14,7 +14,7 @@
   </Style>
   <Style TargetType="CheckBox"><Setter Property="Foreground" Value="#E8EDF5"/><Setter Property="Margin" Value="8"/><Setter Property="VerticalContentAlignment" Value="Center"/></Style>
   <Style x:Key="ServiceCard" TargetType="CheckBox">
-   <Setter Property="Foreground" Value="#E8EDF5"/><Setter Property="Margin" Value="0,0,10,10"/><Setter Property="Width" Value="318"/>
+   <Setter Property="Foreground" Value="#E8EDF5"/><Setter Property="Margin" Value="0,0,10,10"/>
    <Setter Property="Cursor" Value="Hand"/>
    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CheckBox">
     <Border x:Name="Card" Background="#131C2A" BorderBrush="#263449" BorderThickness="1" CornerRadius="9" Padding="14">
@@ -32,7 +32,7 @@
   </Style>
  </Window.Resources>
  <Grid Margin="28">
-  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*" MinHeight="240"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
   <DockPanel Margin="0,0,0,20">
    <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right"><TextBlock Text="STARTUP CLEANER / 0.2" Foreground="#51D2AF" FontWeight="SemiBold"/><TextBlock x:Name="AccessStatus" Foreground="#93A5BE" HorizontalAlignment="Right" Margin="0,6,0,0"/></StackPanel>
    <StackPanel><TextBlock Text="KNIGHTS CLEANER" FontSize="28" FontWeight="Bold"/><TextBlock Text="Your cleanup script. One control panel." Foreground="#93A5BE" Margin="0,5,0,0"/></StackPanel>
@@ -46,7 +46,7 @@
    <DockPanel><Button DockPanel.Dock="Right" Content="Refresh drives" Click="Refresh_Click"/><TextBlock Text="TARGET DRIVES" Foreground="#93A5BE" FontWeight="SemiBold" VerticalAlignment="Center"/></DockPanel>
    <ScrollViewer MaxHeight="60" VerticalScrollBarVisibility="Auto"><WrapPanel x:Name="Drives"/></ScrollViewer>
   </StackPanel>
-  <StackPanel Grid.Row="3"><TextBlock Text="CLEANUP SERVICES" Foreground="#93A5BE" FontWeight="SemiBold" Margin="0,0,0,10"/><WrapPanel x:Name="Services"/></StackPanel>
+  <StackPanel Grid.Row="3"><TextBlock Text="CLEANUP SERVICES" Foreground="#93A5BE" FontWeight="SemiBold" Margin="0,0,0,10"/><UniformGrid x:Name="Services" Columns="3"/></StackPanel>
   <DockPanel Grid.Row="4" Margin="0,10,0,0">
    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"><Button x:Name="AdminButton" Content="Administrator" Click="Admin_Click"/><Button x:Name="CancelButton" Content="Cancel" IsEnabled="False" Click="Cancel_Click"/><Button x:Name="RunButton" Content="RUN CLEANER" Background="#168365" Width="145" Click="Run_Click"/></StackPanel>
    <CheckBox x:Name="SelectAll" Content="Select All" IsThreeState="False" Click="SelectAll_Click"/>

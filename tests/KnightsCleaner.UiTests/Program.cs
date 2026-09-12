@@ -14,6 +14,13 @@ internal static class Program
         window.Show();
         window.UpdateLayout();
         if (window.Title != "Knights Cleaner") throw new Exception("Window title mismatch.");
+        var services = (WrapPanel)window.FindName("Services");
+        if (services.Children.Count != 5) throw new Exception("Expected five script operations.");
+        foreach (CheckBox card in services.Children)
+        {
+            var option = (KnightsCleaner.App.Services.CleanerOption)card.Tag;
+            if (option.Advanced && card.IsChecked == true) throw new Exception("Advanced action selected initially.");
+        }
         var drives = (WrapPanel)window.FindName("Drives");
         var system = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
         foreach (CheckBox drive in drives.Children)

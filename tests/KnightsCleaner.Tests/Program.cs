@@ -50,6 +50,47 @@ finally
     File.SetAttributes(Path.Combine(fixture, "readonly.tmp"), FileAttributes.Normal);
     Directory.Delete(fixture, true);
 }
+// Test rollback without touching real Windows services.
+var active = new FakeService("active", true);
+var idle = new FakeService("idle", false);
+bool cleanupCalled = false;
+ServiceTransaction.Execute([active, idle], () =>
+{
+    if (!active.IsStopped || !idle.IsStopped) throw new Exception("Cleanup ran before stop.");
+    cleanupCalled = true;
+}, log);
+Assert(cleanupCalled && active.IsRunning && idle.IsStopped && idle.Starts == 0, "Service states not preserved.");
+
+active = new FakeService("active", true);
+try { ServiceTransaction.Execute([active], () => throw new IOException("fixture failure"), log); }
+catch (IOException) { }
+Assert(active.IsRunning, "Cleanup failure did not restore service.");
+
+active = new FakeService("active", true) { FailStop = true };
+cleanupCalled = false;
+try { ServiceTransaction.Execute([active], () => cleanupCalled = true, log); }
+catch (IOException) { }
+Assert(!cleanupCalled && active.IsRunning, "Stop failure must prevent deletion and restore service.");
+
+active = new FakeService("active", true) { FailStart = true };
+bool restoreReported = false;
+try { ServiceTransaction.Execute([active], () => { }, log); }
+catch (AggregateException) { restoreReported = true; }
+Assert(restoreReported, "Restoration failures must be reported.");
+Console.WriteLine("PASS: stop-before-cleanup, initial states, rollback, stop failure, restoration failure.");
+
+sealed class FakeService(string name, bool running) : IManagedService
+{
+    public string Name => name;
+    public bool IsRunning { get; private set; } = running;
+    public bool IsStopped => !IsRunning;
+    public bool FailStop { get; init; }
+    public bool FailStart { get; init; }
+    public int Starts { get; private set; }
+    public void Stop() { IsRunning = false; if (FailStop) throw new IOException("Stop fixture failure."); }
+    public void Start() { Starts++; if (FailStart) throw new IOException("Start fixture failure."); IsRunning = true; }
+}
+
 sealed class TestLog : IProgress<string>
 {
     public void Report(string value) => Console.WriteLine(value);

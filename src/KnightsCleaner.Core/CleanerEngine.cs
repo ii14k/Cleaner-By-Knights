@@ -24,12 +24,12 @@ public sealed class CleanerEngine
                 throw new IOException("Reparse point in path; skipped for safety.");
     }
 
-    public CleanupResult Clean(CleanupTarget target, IProgress<string> log, CancellationToken token)
+    public CleanupResult Clean(CleanupTarget target, IProgress<string> log, CancellationToken token, TimeSpan? minimumAge = null, bool recursive = true)
     {
         int deleted = 0, skipped = 0;
         long bytes = 0;
         var root = Normalize(target.Path);
-        var cutoff = DateTime.UtcNow.AddHours(-24);
+        var cutoff = DateTime.UtcNow.Subtract(minimumAge ?? TimeSpan.FromHours(24));
         if (!allowedRoots.Contains(root) ||
             string.Equals(root, Normalize(System.IO.Path.GetPathRoot(root)!), StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("Cleanup root is not allowed.");
@@ -58,7 +58,8 @@ public sealed class CleanerEngine
                         }
                         else if ((attributes & FileAttributes.Directory) != 0)
                         {
-                            Walk(full); // Keep directories, including the root.
+                            if (recursive) Walk(full); // Preserve root permissions and skip links.
+                            else { skipped++; log.Report($"SKIP subdirectory: {full}"); }
                         }
                         else if (File.GetLastWriteTimeUtc(full) >= cutoff)
                         {

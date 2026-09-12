@@ -29,3 +29,9 @@ jobs:
         with:
           name: KnightsCleaner-win-x64
           path: artifacts/KnightsCleaner
+      - name: Package download
+        run: Compress-Archive -Path artifacts/KnightsCleaner/* -DestinationPath artifacts/KnightsCleaner-win-x64.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KnightsCleaner-download
+          path: artifacts/KnightsCleaner-win-x64.zip

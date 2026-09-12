@@ -17,6 +17,12 @@ jobs:
         run: dotnet build src/KnightsCleaner.App/KnightsCleaner.App.csproj -c Release
       - name: Run isolated cleanup safety tests
         run: dotnet run --project tests/KnightsCleaner.Tests -c Release
+      - name: Smoke test WPF window without cleaning
+        run: dotnet run --project tests/KnightsCleaner.UiTests -c Release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KnightsCleaner-preview
+          path: artifacts/KnightsCleaner-preview.png
       - name: Publish Windows x64 application
         run: dotnet publish src/KnightsCleaner.App -c Release -r win-x64 --self-contained true -o artifacts/KnightsCleaner
       - uses: actions/upload-artifact@v4

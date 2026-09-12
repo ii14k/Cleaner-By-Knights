@@ -30,7 +30,7 @@
   </Grid>
   <DockPanel Grid.Row="4">
    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"><Button x:Name="CancelButton" Content="Cancel" IsEnabled="False" Click="Cancel_Click"/><Button x:Name="RunButton" Content="RUN" Background="#187C65" Width="130" Click="Run_Click"/></StackPanel>
-   <CheckBox x:Name="SelectAll" Content="Select All" IsChecked="True" IsThreeState="True" Click="SelectAll_Click"/>
+   <CheckBox x:Name="SelectAll" Content="Select All" IsChecked="True" IsThreeState="False" Click="SelectAll_Click"/>
    <TextBlock x:Name="Status" Text="Ready" Foreground="#94A3B8" VerticalAlignment="Center" Margin="16,0"/>
   </DockPanel>
  </Grid>

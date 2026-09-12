@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KnightsCleaner.Core/KnightsCleaner.Core.csproj" />
+    <Project Path="src/KnightsCleaner.App/KnightsCleaner.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KnightsCleaner.Tests/KnightsCleaner.Tests.csproj" />
+    <Project Path="tests/KnightsCleaner.UiTests/KnightsCleaner.UiTests.csproj" />
+  </Folder>
+</Solution>

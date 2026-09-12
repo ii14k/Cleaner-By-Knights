@@ -35,3 +35,24 @@ jobs:
         with:
           name: KnightsCleaner-download
           path: artifacts/KnightsCleaner-win-x64.zip
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: KnightsCleaner-download
+          path: release
+      - name: Publish first script-conversion preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: pwsh
+        run: |
+          gh release view v0.2.0 --repo $env:GH_REPO *> $null
+          if ($LASTEXITCODE -eq 0) { Write-Output "Release already exists; keeping its published files."; exit 0 }
+          gh release create v0.2.0 release/KnightsCleaner-win-x64.zip --repo $env:GH_REPO --target $env:GITHUB_SHA --title "Knights Cleaner 0.2.0" --prerelease --notes "Desktop conversion of Start_up_Cleaner.bat. Download the ZIP, extract all files, and run KnightsCleaner.exe. Includes Temp, Prefetch, Event Logs and Windows Update options. Advanced actions require administrator access and confirmation. Build, isolated cleanup tests, service rollback tests and UI startup checks pass; real update resets and event-log deletion are not exercised in CI."
+          if ($LASTEXITCODE -ne 0) { throw "Release creation failed." }
